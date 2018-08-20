@@ -6,11 +6,18 @@ import android.view.View
 import android.widget.Button
 import kotlinx.android.synthetic.main.activity_test.*
 import java.util.*
+import kotlin.concurrent.schedule
 
 class TestActivity : AppCompatActivity(), View.OnClickListener {
 
+    //問題数
     var numberOfQestion: Int = 0
+    //残り問題数
+    var numberOfRemaining: Int = 0
+
     var numberOfCorrect: Int = 0
+
+    lateinit var timer: Timer
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,10 +46,21 @@ class TestActivity : AppCompatActivity(), View.OnClickListener {
         question()
     }
 
+    override fun onResume() {
+        super.onResume()
+        timer = Timer()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        timer.cancel()
+    }
+
     private fun commonInit() {
 
         val bundle = intent.extras
         numberOfQestion = bundle.getInt("numberOfQuestion")
+        numberOfRemaining = numberOfQestion
         textViewCount.text = numberOfQestion.toString()
     }
 
@@ -100,8 +118,8 @@ class TestActivity : AppCompatActivity(), View.OnClickListener {
         buttonClear.isEnabled = false
 
         //残り問題数を１個減らす
-        numberOfQestion -= 1
-        textViewCount.text = numberOfQestion.toString()
+        numberOfRemaining -= 1
+        textViewCount.text = numberOfRemaining.toString()
 
         imageViewResult.visibility = View.VISIBLE
 
@@ -122,13 +140,29 @@ class TestActivity : AppCompatActivity(), View.OnClickListener {
             //正解数を反映
             numberOfCorrect += 1
             textViewCorrect.text = numberOfCorrect.toString()
-            //正解率を反映
+
         }
         else {
             imageViewResult.setImageResource(R.drawable.pic_incorrect)
         }
 
+        //正解率を反映
+        val intPoint: Int = ((numberOfCorrect / (numberOfQestion - numberOfRemaining)) * 100)
+        textViewPercent.text = intPoint.toString()
 
+        //残り問題数がなくなった場合（テストが終わった場合）
+        if (numberOfRemaining == 0) {
+            buttonBack.isEnabled = true
+            buttonAnswer.isEnabled = false
+            textViewCompleted.text = "テスト終了"
+        }
+        else {
+            //1秒後に処理する
+            timer.schedule(1000, {runOnUiThread {
+                question()
+            }
+            })
+        }
     }
 
 
