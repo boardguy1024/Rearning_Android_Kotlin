@@ -1,5 +1,6 @@
 package com.example.parkkyungsuk.calculationtest
 
+import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -29,6 +30,10 @@ class TestActivity : AppCompatActivity(), View.OnClickListener {
             answerCheck()
         }
 
+        buttonBack.setOnClickListener {
+            finish()
+        }
+
         button0.setOnClickListener(this)
         button1.setOnClickListener(this)
         button2.setOnClickListener(this)
@@ -44,6 +49,8 @@ class TestActivity : AppCompatActivity(), View.OnClickListener {
 
         //初期、１問目を標示する
         question()
+
+
     }
 
     override fun onResume() {
@@ -81,6 +88,8 @@ class TestActivity : AppCompatActivity(), View.OnClickListener {
         button9.isEnabled = true
         buttonMinus.isEnabled = true
         buttonClear.isEnabled = true
+
+        textViewResultCal.text = "0"
 
         //乱数を生成
         val random = Random()
@@ -191,5 +200,6 @@ class TestActivity : AppCompatActivity(), View.OnClickListener {
             else textViewResultCal.append(button.text)
         }
     }
+
 
 }
