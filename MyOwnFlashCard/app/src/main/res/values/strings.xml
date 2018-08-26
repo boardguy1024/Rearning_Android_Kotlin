@@ -1,3 +1,12 @@
 <resources>
     <string name="app_name">単語帳</string>
+
+    <!-- activity_mainで使う文字列 -->
+    <string name="change_color">画面の背景色を変えたい場合は下のボタンを押してください</string>
+
+    <!-- activity_word_Listで使う文字列 -->
+    <string name="word_list">登録されている単語一覧</string>
+
+    <!-- activity_editで使う文字列 -->
+    <string name="edit_instruction">問題こたえを入力して登録ボタンを押してください</string>
 </resources>
