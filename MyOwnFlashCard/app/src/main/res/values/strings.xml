@@ -9,4 +9,13 @@
 
     <!-- activity_editで使う文字列 -->
     <string name="edit_instruction">問題こたえを入力して登録ボタンを押してください</string>
+
+    <!-- ステータス　-->
+    <string name="status_add">新しい単語の追加</string>
+    <string name="status_change">登録した単語の修正</string>
+
+    <!-- インテントで渡すキー -->
+    <string name="intent_key_status">intent_key_status</string>
+
+
 </resources>
