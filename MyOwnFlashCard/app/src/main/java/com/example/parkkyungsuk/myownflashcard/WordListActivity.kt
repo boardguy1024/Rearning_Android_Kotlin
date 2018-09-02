@@ -11,6 +11,8 @@ class WordListActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_word_list)
 
+        wordListConstraintLayout.setBackgroundResource(intBackgroundColor)
+
         buttonAddWords.setOnClickListener {
             val intent = Intent(this@WordListActivity, EditActivity::class.java)
             intent.putExtra(getString(R.string.intent_key_status), getString(R.string.status_add))
@@ -23,3 +25,7 @@ class WordListActivity : AppCompatActivity() {
 
     }
 }
+
+
+
+
