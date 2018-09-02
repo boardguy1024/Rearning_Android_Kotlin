@@ -2,10 +2,12 @@ package com.example.parkkyungsuk.myownflashcard
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import io.realm.Realm
 import kotlinx.android.synthetic.main.activity_edit.*
-import kotlinx.android.synthetic.main.activity_word_list.*
 
 class EditActivity : AppCompatActivity() {
+
+    lateinit var realm: Realm
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,6 +36,20 @@ class EditActivity : AppCompatActivity() {
         buttonBackEdit.setOnClickListener {
             finish()
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        //Realmのインスタンス取得
+        //RealmはSingltonオブジェクトである
+        realm = Realm.getDefaultInstance()
+
+    }
+
+    override fun onPause() {
+        super.onPause()
+        realm.close()
     }
 
     private fun addNewWord() {
