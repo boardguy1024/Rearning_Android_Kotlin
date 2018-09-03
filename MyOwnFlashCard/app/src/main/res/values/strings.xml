@@ -17,5 +17,8 @@
     <!-- インテントで渡すキー -->
     <string name="intent_key_status">intent_key_status</string>
 
+    <!-- 単語帳データベースのフィールド -->
+    <string name="db_field_question">strQuestion</string>
+    <string name="db_field_answer">srtAnswer</string>
 
 </resources>
