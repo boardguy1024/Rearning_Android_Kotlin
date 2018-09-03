@@ -10,6 +10,10 @@ class EditActivity : AppCompatActivity() {
 
     lateinit private var realm: Realm
 
+    var strQuestion: String = ""
+    var strAnswer: String = ""
+    var position: Int = 0
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_edit)
@@ -18,6 +22,16 @@ class EditActivity : AppCompatActivity() {
         val status = bundle.getString(getString(R.string.intent_key_status))
 
         textViewForEdit.text = status
+
+        //編集の場合
+        if (status == getString(R.string.status_change)) {
+            strQuestion = bundle.getString(getString(R.string.intent_key_question))
+            strAnswer = bundle.getString(getString(R.string.intent_key_answer))
+            position = bundle.getInt(getString(R.string.intent_key_position))
+
+            questionForEditText.setText(strQuestion)
+            answerForEditText.setText(strAnswer)
+        }
 
         constraintLayoutForEdit.setBackgroundResource(intBackgroundColor)
 
@@ -72,6 +86,26 @@ class EditActivity : AppCompatActivity() {
     }
 
     private fun changeWord() {
+
+        val result = realm.where(WordDB::class.java)
+                .findAll()
+                .sort(getString(R.string.db_field_question))
+
+        val selectedDB = result[position]
+
+        realm.beginTransaction()
+
+        selectedDB.strQuestion = questionForEditText.text.toString()
+        selectedDB.strAnswer = answerForEditText.text.toString()
+
+        realm.commitTransaction()
+
+        //DBに保存後、textViewにテキストを削除
+        questionForEditText.setText("")
+        answerForEditText.setText("")
+
+        //編集完了メッセージを表示
+        Toast.makeText(this@EditActivity, "編集が完了しました", Toast.LENGTH_SHORT).show()
 
     }
 
