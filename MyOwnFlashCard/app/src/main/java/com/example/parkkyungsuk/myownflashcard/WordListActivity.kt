@@ -9,12 +9,15 @@ import android.widget.ArrayAdapter
 import io.realm.Realm
 import io.realm.RealmResults
 import kotlinx.android.synthetic.main.activity_word_list.*
+import java.lang.reflect.GenericArrayType
 
 class WordListActivity : AppCompatActivity(), AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener {
 
 
     lateinit var realm: Realm
     lateinit var result: RealmResults<WordDB>
+    lateinit var words_list: ArrayList<String>
+    lateinit var adaptor: ArrayAdapter<String>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,7 +50,7 @@ class WordListActivity : AppCompatActivity(), AdapterView.OnItemClickListener, A
                 .findAll()
                 .sort(getString(R.string.db_field_question))
 
-        val words_list = ArrayList<String>()
+        words_list = ArrayList<String>()
 
         result.forEach { wordDB ->
             words_list.add(wordDB.strQuestion + " : " + wordDB.strAnswer)
@@ -58,7 +61,7 @@ class WordListActivity : AppCompatActivity(), AdapterView.OnItemClickListener, A
 //            words_list.add(it.strQuestion + " : " + it.strAnswer)
 //        }
 
-        val adaptor = ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, words_list)
+        adaptor = ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, words_list)
         listView.adapter = adaptor
     }
 
@@ -85,7 +88,20 @@ class WordListActivity : AppCompatActivity(), AdapterView.OnItemClickListener, A
 
     //削除
     override fun onItemLongClick(parent: AdapterView<*>?, view: View?, position: Int, id: Long): Boolean {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+
+        val selectedDB = result[position]
+
+        realm.beginTransaction()
+        selectedDB.deleteFromRealm()
+        realm.commitTransaction()
+
+        words_list.removeAt(position)
+
+        listView.adapter = adaptor
+
+        //戻り値でfalseをするとこのコールバックが完了してからもタップを感知する
+        // trueにした場合にはコールバック後感知させない
+        return true
     }
 }
 
